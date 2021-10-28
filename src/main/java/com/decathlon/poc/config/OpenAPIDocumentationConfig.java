@@ -40,7 +40,7 @@ public class OpenAPIDocumentationConfig {
     public Docket customImplementation(ServletContext servletContext, @Value("${openapi.openAPIPetstore.base-path:/v2}") String basePath) {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.decathlon.poc.api"))
+                .apis(RequestHandlerSelectors.basePackage("com.decathlon.poc"))
                 .paths(PathSelectors.any())
                 .build()
                 .pathProvider((PathProvider) new BasePathAwareRelativePathProvider(servletContext, basePath))
