@@ -68,6 +68,31 @@
 				<version>5.3.0</version>
 				<executions>
 					<execution>
+						<id>1</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>${project.basedir}/src/main/resources/openapi.v1.yaml</inputSpec>
+							<generatorName>spring</generatorName>
+							<library>spring-boot</library>
+							<ignoreFileOverride>${project.basedir}/.openapi-generator-ignore</ignoreFileOverride>
+							<configOptions>
+								<basePackage>com.decathlon.poc</basePackage>
+								<configPackage>com.decathlon.poc.stoplight.config</configPackage>
+								<modelPackage>com.decathlon.poc.stoplight.model</modelPackage>
+								<apiPackage>com.decathlon.poc.stoplight.api</apiPackage>
+								<sourceFolder>src/main/java</sourceFolder>
+								<delegatePattern>true</delegatePattern>
+								<useBeanValidation>true</useBeanValidation>
+								<skipOverwrite>true</skipOverwrite>
+								<disableHtmlEscaping>true</disableHtmlEscaping>
+							</configOptions>
+							<withXml>true</withXml>
+						</configuration>
+					</execution>
+					<execution>
+						<id>2</id>
 						<goals>
 							<goal>generate</goal>
 						</goals>
@@ -78,9 +103,9 @@
 							<ignoreFileOverride>${project.basedir}/.openapi-generator-ignore</ignoreFileOverride>
 							<configOptions>
 								<basePackage>com.decathlon.poc</basePackage>
-								<configPackage>com.decathlon.poc.config</configPackage>
-								<modelPackage>com.decathlon.poc.model</modelPackage>
-								<apiPackage>com.decathlon.poc.api</apiPackage>
+								<configPackage>com.decathlon.poc.petstore.config</configPackage>
+								<modelPackage>com.decathlon.poc.petstore.model</modelPackage>
+								<apiPackage>com.decathlon.poc.petstore.api</apiPackage>
 								<sourceFolder>src/main/java</sourceFolder>
 								<delegatePattern>true</delegatePattern>
 								<useBeanValidation>true</useBeanValidation>
