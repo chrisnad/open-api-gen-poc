@@ -7,15 +7,12 @@ import org.springframework.boot.ExitCodeGenerator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.io.Serial;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"com.decathlon.poc", "com.decathlon.poc.petstore.api" , "com.decathlon.poc.petstore.config"})
 public class PocApplication implements CommandLineRunner {
-
 
 	@Override
 	public void run(String... arg0) {
