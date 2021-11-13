@@ -32,7 +32,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Pet.v1'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pet.v1'
+              examples: {}
         default:
           description: unexpected error
           content:
