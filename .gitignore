@@ -33,3 +33,4 @@ build/
 .vscode/
 /pocvenv/
 /.hypothesis/
+/.DS_Store/
