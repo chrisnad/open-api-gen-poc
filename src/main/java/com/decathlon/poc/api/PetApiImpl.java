@@ -1,7 +1,7 @@
 package com.decathlon.poc.api;
 
-import com.decathlon.poc.v1.api.PetsApiDelegate;
-import com.decathlon.poc.v1.model.PetV1;
+import com.decathlon.poc.pets.api.PetsApiDelegate;
+import com.decathlon.poc.pets.model.PetV1;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

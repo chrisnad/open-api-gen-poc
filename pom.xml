@@ -78,10 +78,10 @@
 							<library>spring-boot</library>
 							<ignoreFileOverride>${project.basedir}/.openapi-generator-ignore</ignoreFileOverride>
 							<configOptions>
-								<basePackage>com.decathlon.poc.v1</basePackage>
-								<configPackage>com.decathlon.poc.v1.config</configPackage>
-								<modelPackage>com.decathlon.poc.v1.model</modelPackage>
-								<apiPackage>com.decathlon.poc.v1.api</apiPackage>
+								<basePackage>com.decathlon.poc.pets</basePackage>
+								<configPackage>com.decathlon.poc.pets.config</configPackage>
+								<modelPackage>com.decathlon.poc.pets.model</modelPackage>
+								<apiPackage>com.decathlon.poc.pets.api</apiPackage>
 								<sourceFolder>src/main/java</sourceFolder>
 								<delegatePattern>true</delegatePattern>
 								<useBeanValidation>true</useBeanValidation>
@@ -102,10 +102,10 @@
 							<library>spring-boot</library>
 							<ignoreFileOverride>${project.basedir}/.openapi-generator-ignore</ignoreFileOverride>
 							<configOptions>
-								<basePackage>com.decathlon.poc.v2</basePackage>
-								<configPackage>com.decathlon.poc.v2.config</configPackage>
-								<modelPackage>com.decathlon.poc.v2.model</modelPackage>
-								<apiPackage>com.decathlon.poc.v2.api</apiPackage>
+								<basePackage>com.decathlon.poc.todo</basePackage>
+								<configPackage>com.decathlon.poc.todo.config</configPackage>
+								<modelPackage>com.decathlon.poc.todo.model</modelPackage>
+								<apiPackage>com.decathlon.poc.todo.api</apiPackage>
 								<sourceFolder>src/main/java</sourceFolder>
 								<delegatePattern>true</delegatePattern>
 								<useBeanValidation>true</useBeanValidation>
