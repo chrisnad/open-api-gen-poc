@@ -22,7 +22,7 @@ import javax.servlet.ServletContext;
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2021-10-27T10:57:52.953671+02:00[Europe/Paris]")
 @Configuration
 @EnableSwagger2
-public class OpenAPIDocumentationConfig {
+public class OpenAPIConfig {
 
     ApiInfo apiInfo() {
         return new ApiInfoBuilder()
@@ -37,7 +37,7 @@ public class OpenAPIDocumentationConfig {
     }
 
     @Bean
-    public Docket customImplementation(ServletContext servletContext, @Value("${openapi.openAPIPetstore.base-path:/v2}") String basePath) {
+    public Docket customImplementation(ServletContext servletContext, @Value("${server.servlet.contextPath:/poc}") String basePath) {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.decathlon.poc"))

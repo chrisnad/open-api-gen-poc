@@ -78,10 +78,10 @@
 							<library>spring-boot</library>
 							<ignoreFileOverride>${project.basedir}/.openapi-generator-ignore</ignoreFileOverride>
 							<configOptions>
-								<basePackage>com.decathlon.poc</basePackage>
-								<configPackage>com.decathlon.poc.stoplight.config</configPackage>
-								<modelPackage>com.decathlon.poc.stoplight.model</modelPackage>
-								<apiPackage>com.decathlon.poc.stoplight.api</apiPackage>
+								<basePackage>com.decathlon.poc.v1</basePackage>
+								<configPackage>com.decathlon.poc.v1.config</configPackage>
+								<modelPackage>com.decathlon.poc.v1.model</modelPackage>
+								<apiPackage>com.decathlon.poc.v1.api</apiPackage>
 								<sourceFolder>src/main/java</sourceFolder>
 								<delegatePattern>true</delegatePattern>
 								<useBeanValidation>true</useBeanValidation>
@@ -97,15 +97,15 @@
 							<goal>generate</goal>
 						</goals>
 						<configuration>
-							<inputSpec>${project.basedir}/src/main/resources/petstore.yaml</inputSpec>
+							<inputSpec>https://raw.githubusercontent.com/NateLove/schemathesis-lab/master/todo.yaml</inputSpec>
 							<generatorName>spring</generatorName>
 							<library>spring-boot</library>
 							<ignoreFileOverride>${project.basedir}/.openapi-generator-ignore</ignoreFileOverride>
 							<configOptions>
-								<basePackage>com.decathlon.poc</basePackage>
-								<configPackage>com.decathlon.poc.petstore.config</configPackage>
-								<modelPackage>com.decathlon.poc.petstore.model</modelPackage>
-								<apiPackage>com.decathlon.poc.petstore.api</apiPackage>
+								<basePackage>com.decathlon.poc.v2</basePackage>
+								<configPackage>com.decathlon.poc.v2.config</configPackage>
+								<modelPackage>com.decathlon.poc.v2.model</modelPackage>
+								<apiPackage>com.decathlon.poc.v2.api</apiPackage>
 								<sourceFolder>src/main/java</sourceFolder>
 								<delegatePattern>true</delegatePattern>
 								<useBeanValidation>true</useBeanValidation>

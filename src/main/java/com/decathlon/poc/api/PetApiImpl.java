@@ -1,14 +1,12 @@
 package com.decathlon.poc.api;
 
-
-import com.decathlon.poc.stoplight.api.PetsApiDelegate;
-import com.decathlon.poc.stoplight.model.PetV1;
+import com.decathlon.poc.v1.api.PetsApiDelegate;
+import com.decathlon.poc.v1.model.PetV1;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,7 +26,7 @@ public class PetApiImpl implements PetsApiDelegate {
         rex.id(1L).name("rex");
         PetV1 max = new PetV1();
         max.id(1L).name("max");
-        return new ResponseEntity<>(new ArrayList<>(List.of(rex, max)), HttpStatus.OK);
+        return new ResponseEntity<>(List.of(rex, max), HttpStatus.OK);
     }
 
     @Override
