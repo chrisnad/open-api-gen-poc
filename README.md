@@ -16,3 +16,18 @@ Your application is accessible at `http://localhost:8080/poc`
 A UI representation is available at `http://localhost:8080/poc/swagger-ui.html`
 
 Try modifying any OpenApi spec file (the .yaml files in the `src/main/resources/` directory) then re-generate sources.
+
+## Run Schemathesis tests
+
+Prerequisites:
+- Python3
+
+Create a virtual environment with `python3 -m venv pocvenv`
+
+Activate the virtual environment with `source pocvenv/bin/activate`
+
+Install `schemathesis` with `pip install schemathesis`
+
+Make sure your application is running with `mvn spring-boot run`
+
+Run Schemathesis tests with `schemathesis run src/main/resources/todo.yaml --checks=all --base-url=http://localhost:8080/poc/v1`
