@@ -6,14 +6,14 @@ Prerequisites:
 - Maven 3.6.3 or higher
 - Java 8 or higher
 
-Open sources in your favorite IDE as a Maven project and run `mvn generate-sources`.
+Open the project in your favorite IDE and run `mvn generate-sources`.
 Then run spring-boot application : `mvn spring-boot run`
 
 You should see `Tomcat initialized with port(s): 8080 (http)`
 
 Your application is accessible at `http://localhost:8080/poc`
 
-Automatically generated interactive user interface is available at `http://localhost:8080/poc/swagger-ui/`
+Automatically generated, interactive user interface is available at `http://localhost:8080/poc/swagger-ui/`
 
 And generated docs at `http://localhost:8080/poc/documentation/v3/api-docs`
 
@@ -32,4 +32,6 @@ Install `schemathesis` with `pip install schemathesis`
 
 Make sure your application is running with `mvn spring-boot run`
 
-Run Schemathesis tests with `schemathesis run src/main/resources/todo.yaml --checks=all --base-url=http://localhost:8080/poc/v1`
+Run Schemathesis tests with `schemathesis run src/main/resources/todo.yaml --checks=all --base-url=http://localhost:8080/poc/todo/v1`
+
+Try modifying the "Todo" api implementation (src/main/java/com/decathlon/poc/api/TodoImpl.java) and run Schemathesis tests again 
