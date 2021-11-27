@@ -28,8 +28,29 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>2.9.2</version>
+		</dependency>
+		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.locationtech.jts</groupId>
+			<artifactId>jts-core</artifactId>
+			<version>1.18.2</version>
+			<exclusions>
+				<exclusion>
+					<groupId>xerces</groupId>
+					<artifactId>xercesImpl</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<!-- OpenApiGenerator dependencies here-->
@@ -64,21 +85,27 @@
 							<goal>generate</goal>
 						</goals>
 						<configuration>
-							<inputSpec>${project.basedir}/src/main/resources/dkt-ff-sap.yaml</inputSpec>
+							<inputSpec>${project.basedir}/src/main/resources/dkt-ff-admin-server.yaml</inputSpec>
 							<generatorName>spring</generatorName>
 							<library>spring-boot</library>
 							<ignoreFileOverride>${project.basedir}/.openapi-generator-ignore</ignoreFileOverride>
 							<configOptions>
-								<basePackage>com.decathlon.poc.sap</basePackage>
-								<configPackage>com.decathlon.poc.sap.config</configPackage>
-								<modelPackage>com.decathlon.poc.sap.model</modelPackage>
-								<apiPackage>com.decathlon.poc.sap.api</apiPackage>
+								<basePackage>com.decathlon.poc.admin</basePackage>
+								<configPackage>com.decathlon.poc.admin.config</configPackage>
+								<modelPackage>com.decathlon.poc.admin.model</modelPackage>
+								<apiPackage>com.decathlon.poc.admin.api</apiPackage>
 								<sourceFolder>src/main/java</sourceFolder>
 								<delegatePattern>true</delegatePattern>
+								<!--suppress UnresolvedMavenProperty -->
+								<additionalModelTypeAnnotations>@lombok.Getter @lombok.Builder(toBuilder = true) @lombok.NoArgsConstructor @lombok.AllArgsConstructor</additionalModelTypeAnnotations>
 								<useBeanValidation>true</useBeanValidation>
 								<skipOverwrite>true</skipOverwrite>
 								<disableHtmlEscaping>true</disableHtmlEscaping>
 							</configOptions>
+							<importMappings>
+								<importMapping>Geometry=org.locationtech.jts.geom.Geometry</importMapping>
+							</importMappings>
+							<generateAliasAsModel>true</generateAliasAsModel>
 							<withXml>true</withXml>
 						</configuration>
 					</execution>

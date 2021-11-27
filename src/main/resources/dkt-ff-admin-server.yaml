@@ -1,0 +1,908 @@
+openapi: 3.0.1
+info:
+  title: FULFILLER - DKT-FF-ADMIN-SERVICE MODULE
+  description: DKT-FF-ADMIN-SERVICE is part of the Decathlon Fulfiller (DKTFF) suite, and contributes to the Chopper project.
+  contact:
+    name: CS-Fulfiller
+    email: csfulfiller@decathlon.net
+  version: V1.0
+servers:
+  - url: https://api.preprod.decathlon.net/decathlon_fulfiller_admin_service/v1
+    description: DECATHLON API PORTAL - PRE PRODUCTION server
+    variables: {}
+  - url: https://api.decathlon.net/decathlon_fulfiller_admin_service/v1
+    description: DECATHLON API PORTAL - PRODUCTION server
+    variables: {}
+tags:
+  - name: ZonesForAdmin
+security:
+  - bearerAuth: []
+paths:
+  /zones_admin:
+    get:
+      tags:
+        - ZonesForAdmin
+      summary: Get all the zones by country
+      operationId: getZonesByCountry
+      parameters:
+        - name: country
+          in: query
+          description: Country
+          required: true
+          schema:
+            type: string
+        - name: exclude_fulfillers
+          in: query
+          description: If true, only oneFF will be called
+          required: false
+          schema:
+            type: boolean
+        - name: range
+          in: query
+          description: Record range for scrolling (optional)
+          required: false
+          schema:
+            type: string
+          example: 0-29
+      responses:
+        '206':
+          description: A subset of zones
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Zone'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Zone'
+    put:
+      tags:
+        - ZonesForAdmin
+      summary: Create or update a zone
+      operationId: put
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ZoneDetail'
+        required: true
+      responses:
+        '200':
+          description: Zones by country
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ZoneId'
+  /ping:
+    get:
+      tags:
+        - ping-controller
+      summary: Ping endpoint to check the app availability
+      description: This should always return 200 OK
+      operationId: ping
+      responses:
+        '200':
+          description: When the service is up
+        '503':
+          description: When the service is unavailable
+  /shipping_fees/{fulfiller_id}:
+    get:
+      tags:
+        - shipping-fee-controller
+      summary: Get all the shipping fees by fulfillment id
+      operationId: getShippingFees
+      parameters:
+        - name: fulfiller_id
+          in: path
+          description: fulfiller ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Shipping fees by fulfillment id
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ShippingFee'
+  /admin_authorizations/{user}:
+    get:
+      tags:
+        - admin-auth
+      summary: Get given user roles and countries
+      description: Given user roles and countries
+      operationId: getUserAuthorizations
+      parameters:
+        - name: user
+          in: path
+          description: Given user to get authorizations
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User roles and countries
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminAuthorization'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminAuthorization'
+    put:
+      tags:
+        - admin-auth
+      summary: Updates a user authorization
+      operationId: updateUserAuthorization
+      parameters:
+        - name: user
+          in: path
+          description: User to update
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminAuthorization'
+        required: true
+      responses:
+        '200':
+          description: Lead time calendar updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminAuthorization'
+        '404':
+          description: When the current user authorization not found
+    delete:
+      tags:
+        - admin-auth
+      summary: Delete user authorization by user name
+      operationId: deleteUserAuthorization
+      parameters:
+        - name: user
+          in: path
+          description: User to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: User authorizations deleted successfully
+        '404':
+          description: User authorizations not found
+  /promises:
+    get:
+      tags:
+        - Promises
+      summary: Get all the promises by country
+      operationId: getPromisesByCountry
+      parameters:
+        - name: country
+          in: query
+          description: Country
+          required: true
+          schema:
+            type: string
+        - name: name
+          in: query
+          description: Promise name
+          required: false
+          schema:
+            type: string
+        - name: zone_name
+          in: query
+          description: Zone name
+          required: false
+          schema:
+            type: string
+        - name: sub_zone_id
+          in: query
+          description: Sub zone id
+          required: false
+          schema:
+            type: string
+        - name: fulfillment_types
+          in: query
+          description: Fulfillment types
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - USER_DELIVERY
+                - STORE_DELIVERY
+                - STORE_PICKUP
+                - EXTERNAL_PICKUP
+        - name: sort_by
+          in: query
+          description: |
+            Sort criterion.
+                    Available criteria are:
+                    - name
+                    - zone_name
+                    - sub_zone_id
+                    - fulfillment_type
+                    - lead_time
+                    - carbon_footprint
+            You must add a suffix to specify the sort order:asc or desc.
+          required: false
+          schema:
+            type: string
+          examples:
+            sort descending:
+              description: name.desc
+            sort ascending:
+              description: name.asc
+        - name: range
+          in: query
+          description: Record range for scrolling (optional)
+          required: false
+          schema:
+            type: string
+          example: 0-29
+      responses:
+        '206':
+          description: A subset of promises
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Promise'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Promise'
+    put:
+      tags:
+        - Promises
+      summary: Create or update a promise
+      operationId: createOrUpdatePromise
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Promise'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: boolean
+  /{admin_resource}:
+    get:
+      tags:
+        - generic-admin-resource-controller
+      operationId: getResourceList
+      parameters:
+        - name: params
+          in: query
+          required: true
+          schema:
+            type: object
+            properties:
+              all:
+                type: object
+                additionalProperties:
+                  type: string
+                writeOnly: true
+              empty:
+                type: boolean
+            additionalProperties:
+              type: array
+              items:
+                type: string
+        - name: admin_resource
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - lead_time_calendars
+              - carrier_methods
+              - routes
+              - logistic_class_overridden_rules
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+    post:
+      tags:
+        - generic-admin-resource-controller
+      operationId: createResource
+      parameters:
+        - name: admin_resource
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - lead_time_calendars
+              - carrier_methods
+              - routes
+              - logistic_class_overridden_rules
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonNode'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+  /{admin_resource}/{id}:
+    get:
+      tags:
+        - generic-admin-resource-controller
+      operationId: getResourceById
+      parameters:
+        - name: admin_resource
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - lead_time_calendars
+              - carrier_methods
+              - routes
+              - logistic_class_overridden_rules
+        - name: id
+          in: path
+          description: ID of the resource to find
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+    put:
+      tags:
+        - generic-admin-resource-controller
+      operationId: updateResourceById
+      parameters:
+        - name: admin_resource
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - lead_time_calendars
+              - carrier_methods
+              - routes
+              - logistic_class_overridden_rules
+        - name: id
+          in: path
+          description: ID of the resource to create or update
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonNode'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+    delete:
+      tags:
+        - generic-admin-resource-controller
+      operationId: deleteResourceById
+      parameters:
+        - name: admin_resource
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - lead_time_calendars
+              - carrier_methods
+              - routes
+              - logistic_class_overridden_rules
+        - name: id
+          in: path
+          description: ID of the resource to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+  /admin_authorizations:
+    get:
+      tags:
+        - admin-auth
+      summary: Get current user roles and countries
+      description: Current user roles and countries
+      operationId: getCurrentUserAuthorizations
+      responses:
+        '200':
+          description: User roles and countries
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminAuthorization'
+    post:
+      tags:
+        - admin-auth
+      summary: Create user roles and countries access
+      description: Create user roles and countries access
+      operationId: createUserAuthorization
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminAuthorization'
+        required: true
+      responses:
+        '201':
+          description: User roles and countries access created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminAuthorization'
+        '400':
+          description: Invalid input
+  /zones_admin/{id}:
+    get:
+      tags:
+        - ZonesForAdmin
+      summary: Get zone by id
+      description: Get zone by id
+      operationId: get
+      parameters:
+        - name: id
+          in: path
+          description: ID of the zone to find
+          required: true
+          schema:
+            type: string
+          example: 957d1ade-3c5b-4d7c-937b-e614caebaba1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ZoneDetail'
+  /zones_admin/check_uniqueness:
+    post:
+      tags:
+        - ZonesForAdmin
+      summary: Get errors if zone is not unique
+      operationId: checkUniqueness
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ZoneDetail'
+        required: true
+      responses:
+        '200':
+          description: Errors by field name
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Map'
+  /logistic_classes/{fulfiller_id}:
+    get:
+      tags:
+        - logistic-class-controller
+      summary: Get all the logistic classes by fulfillment id
+      operationId: getLogisticClasses
+      parameters:
+        - name: fulfiller_id
+          in: path
+          description: fulfiller ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Logistic classes by fulfillment id
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LogisticClass'
+  /sub_zones/{zone_id}:
+    get:
+      tags:
+        - sub-zone-controller
+      summary: Get all the sub zone by zone id
+      operationId: getSubZonesByZoneId
+      parameters:
+        - name: zone_id
+          in: path
+          description: zone ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Sub zones by zone id
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SubZoneDetail'
+  /admin_authorizations/list:
+    get:
+      tags:
+        - admin-auth
+      summary: Get user roles and countries
+      description: User roles and countries
+      operationId: getUsersListAuthorizations
+      responses:
+        '200':
+          description: User roles and countries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AdminAuthorization'
+  /lead_times/{fulfiller_id}:
+    get:
+      tags:
+        - lead-time-controller
+      summary: Get all the lead times by fulfillment id
+      operationId: getLeadTimes
+      parameters:
+        - name: fulfiller_id
+          in: path
+          description: fulfiller ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lead times by fulfillment id
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LeadTime'
+  /sub_zone_ids:
+    get:
+      tags:
+        - ZonesForAdmin
+      summary: Get all the sub zone ids by country
+      operationId: getSubZonesByCountry
+      parameters:
+        - name: country
+          in: query
+          description: Country
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: All sub zone ids
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+  /promises/{id}:
+    get:
+      tags:
+        - Promises
+      summary: Get promise by id
+      description: Get promise by id
+      operationId: getPromiseById
+      parameters:
+        - name: id
+          in: path
+          description: ID of the promise to find
+          required: true
+          schema:
+            type: string
+          example: zone_id+sub_zone_id+fulfillment_type+promise_name
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Promise'
+components:
+  securitySchemes:
+    bearerAuth: # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Zone:
+      required:
+        - fulfiller_id
+        - number
+        - priority
+        - type
+        - zone_name
+      type: object
+      properties:
+        zone_id:
+          type: string
+        zone_name:
+          type: string
+        fulfiller_id:
+          type: string
+        priority:
+          type: string
+        type:
+          type: string
+        number:
+          type: string
+        sub_zone_ids:
+          type: array
+          items:
+            type: string
+    ShippingFee:
+      type: object
+      properties:
+        shipping_fee_id:
+          type: string
+        name:
+          type: string
+    LeadTime:
+      type: object
+      properties:
+        lead_time_id:
+          type: string
+        name:
+          type: string
+    LogisticClass:
+      type: object
+      properties:
+        logistic_class_id:
+          type: string
+        name:
+          type: string
+    LogisticClassSettings:
+      type: object
+      properties:
+        logistic_class:
+          $ref: '#/components/schemas/LogisticClass'
+        shipping_fee:
+          $ref: '#/components/schemas/ShippingFee'
+        lead_time:
+          $ref: '#/components/schemas/LeadTime'
+        carbon_footprint:
+          type: integer
+          format: int32
+        enabled:
+          type: boolean
+        carrier_name:
+          type: string
+    Promise:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        zone_name:
+          type: string
+        zone_id:
+          type: string
+        sub_zone_id:
+          type: string
+        fulfillment_type:
+          type: string
+        shipping_fee:
+          $ref: '#/components/schemas/ShippingFee'
+        lead_time:
+          $ref: '#/components/schemas/LeadTime'
+        carbon_footprint:
+          type: integer
+          format: int32
+        enabled:
+          type: boolean
+        cash_on_delivery_allowed:
+          type: boolean
+        carrier_name:
+          type: string
+        logistic_class_settings:
+          type: array
+          items:
+            $ref: '#/components/schemas/LogisticClassSettings'
+    AdminAuthorization:
+      type: object
+      properties:
+        uid:
+          type: string
+        role:
+          type: string
+        countries:
+          $ref: '#/components/schemas/CountryList'
+      description: User authorization to update in database
+    CountryList:
+      type: object
+      properties:
+        countries:
+          type: array
+          items:
+            type: string
+    JsonNode:
+      type: object
+    Geometry:
+      type: object
+    LogisticClassNames:
+      type: object
+      properties:
+        logistic_class_names:
+          type: array
+          items:
+            type: string
+    FulfillmentMetadata:
+      type: object
+      properties:
+        fulfillment_type:
+          type: string
+        name:
+          type: string
+        shipping_fee:
+          $ref: '#/components/schemas/ShippingFee'
+        lead_time:
+          $ref: '#/components/schemas/LeadTime'
+        carbon_footprint:
+          type: integer
+          format: int32
+        logistic_class_settings:
+          type: array
+          items:
+            $ref: '#/components/schemas/OneFFLogisticClassSettings'
+        cash_on_delivery_allowed:
+          type: boolean
+        enabled:
+          type: boolean
+        carrier_name:
+          type: string
+    OneFFLogisticClassSettings:
+      type: object
+      properties:
+        logistic_class_id:
+          type: string
+        shipping_fee_id:
+          type: string
+        lead_time_id:
+          type: string
+        carbon_footprint:
+          type: integer
+          format: int32
+        enabled:
+          type: boolean
+        carrier_name:
+          type: string
+    SubZoneDetail:
+      type: object
+      properties:
+        sub_zone_id:
+          type: string
+        sub_zone_name:
+          type: string
+        country:
+          type: string
+        geometry:
+          $ref: '#/components/schemas/Geometry'
+        fulfillment_metadata:
+          type: array
+          items:
+            $ref: '#/components/schemas/FulfillmentMetadata'
+        enabled:
+          type: boolean
+    Type:
+      type: object
+    ReplenishmentZone:
+      type: object
+      properties:
+        zone_id:
+          type: string
+        replenishment_time_hour:
+          type: integer
+          format: int32
+    ZoneDetail:
+      required:
+        - country
+        - sub_zones
+      type: object
+      properties:
+        zone_id:
+          type: string
+        zone_name:
+          type: string
+        zone_display_name:
+          type: string
+        fulfiller_id:
+          type: string
+        priority:
+          type: string
+        replenishment_priority_within_zone_priority:
+          type: string
+        type:
+          type: string
+        number:
+          type: string
+        latitude:
+          type: string
+        longitude:
+          type: string
+        country:
+          type: string
+        ean:
+          type: string
+        booking_period:
+          type: string
+        warehouse_country:
+          type: string
+        sub_zones:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubZoneDetail'
+        replenishment_zones:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReplenishmentZone'
+    ZoneId:
+      type: object
+      properties:
+        zone_id:
+          type: string
+    Map:
+      type: object
+      additionalProperties:
+        type: string
