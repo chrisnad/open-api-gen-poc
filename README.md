@@ -13,7 +13,9 @@ You should see `Tomcat initialized with port(s): 8080 (http)`
 
 Your application is accessible at `http://localhost:8080/poc`
 
-A UI representation is available at `http://localhost:8080/poc/swagger-ui.html`
+Automatically generated interactive user interface is available at `http://localhost:8080/poc/swagger-ui/`
+
+And generated docs at `http://localhost:8080/poc/documentation/v3/api-docs`
 
 Try modifying any OpenApi spec file (the .yaml files in the `src/main/resources/` directory) then re-generate sources.
 
