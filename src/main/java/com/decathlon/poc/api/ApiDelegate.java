@@ -27,7 +27,7 @@ public class ApiDelegate {
     public String getUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         // implement your own logic to get the user
-        return authentication.getName();
+        return "myUserName";
     }
 
 }
