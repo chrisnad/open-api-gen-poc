@@ -1,5 +1,8 @@
 package com.decathlon.poc.api;
 
+import com.decathlon.poc.petstore.ApiException;
+import com.decathlon.poc.petstore.api.PetApi;
+import com.decathlon.poc.petstore.model.Pet;
 import com.decathlon.poc.todo.api.TodosApiDelegate;
 import com.decathlon.poc.todo.model.Todo;
 import org.springframework.http.HttpStatus;
@@ -24,21 +27,28 @@ public class TodoImpl implements TodosApiDelegate {
 
     @Override
     public ResponseEntity<Todo> getTodo(String todoId) {
-        Todo response = new Todo();
-        response.setName("todo name");
-        response.setCompleted(false);
-        response.setDescription("todo description");
-        response.setDate(OffsetDateTime.now().minusDays(1L));
-        return ResponseEntity.ok(response);
+        PetApi petApi = new PetApi();
+        try {
+            Pet pet = petApi.getPetById(1L);
+            Todo todo = new Todo()
+                    .name(pet.getName())
+                    .completed(true)
+                    .description("pet found!")
+                    .date(OffsetDateTime.now());
+            return ResponseEntity.ok(todo);
+        } catch (ApiException e) {
+            e.printStackTrace();
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @Override
     public ResponseEntity<List<Todo>> getTodos(Boolean completed) {
-        Todo todo = new Todo();
-        todo.setName("todo name");
-        todo.setCompleted(false);
-        todo.setDescription("todo description");
-        todo.setDate(OffsetDateTime.now().minusDays(1L));
+        Todo todo = new Todo()
+                .name("todo")
+                .completed(true)
+                .description("todo description")
+                .date(OffsetDateTime.now());
         return ResponseEntity.ok(List.of(todo));
     }
 
