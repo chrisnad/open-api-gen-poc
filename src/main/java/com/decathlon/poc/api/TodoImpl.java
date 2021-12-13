@@ -29,7 +29,7 @@ public class TodoImpl implements TodosApiDelegate {
     public ResponseEntity<Todo> getTodo(String todoId) {
         PetApi petApi = new PetApi();
         try {
-            Pet pet = petApi.getPetById(1L);
+            Pet pet = petApi.getPetById(Long.valueOf(todoId));
             Todo todo = new Todo()
                     .name(pet.getName())
                     .completed(true)
